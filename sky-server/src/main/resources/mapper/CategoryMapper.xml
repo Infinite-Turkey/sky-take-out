@@ -16,7 +16,7 @@
         order by sort asc , create_time desc
     </select>
 
-    <update id="update" parameterType="Category">
+    <update id="update" parameterType="com.sky.entity.Category">
         update category
         <set>
             <if test="type != null">
@@ -41,7 +41,7 @@
         where id = #{id}
     </update>
 
-    <select id="list" resultType="Category">
+    <select id="list" resultType="com.sky.entity.Category">
         select * from category
         where status = 1
         <if test="type != null">
