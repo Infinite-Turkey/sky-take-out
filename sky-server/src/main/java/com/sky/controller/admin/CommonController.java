@@ -26,16 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 @Api(tags = "通用接口")
 @Slf4j
 public class CommonController {
-
-  @Value("${sky.aws.endpoint}")
-  private String endpoint;
-  @Value("${sky.aws.access-key-id}")
-  private String accessKeyId;
-  @Value("${sky.aws.access-key-secret}")
-  private String accessKeySecret;
-  @Value("${sky.aws.bucket-name}")
-  private String bucketName;
-
   @Autowired
   private AliOssUtil aliOssUtil;
 
