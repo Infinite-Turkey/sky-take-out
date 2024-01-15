@@ -8,10 +8,12 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.Setmeal;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -22,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +38,8 @@ public class DishServiceImpl implements DishService {
   private DishFlavorMapper dishFlavorMapper;
   @Autowired
   private SetmealDishMapper setmealDishMapper;
+  @Autowired
+  private SetmealMapper setmealMapper;
 
 
   /**
@@ -89,7 +94,7 @@ public class DishServiceImpl implements DishService {
       }
     }
     //判断当前菜品是否能删除---是否被套餐关联??
-    List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishId(ids);
+    List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(ids);
     if (setmealIds != null && setmealIds.size() >0){
       //当前菜品被套餐关联
       throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
@@ -155,5 +160,35 @@ public class DishServiceImpl implements DishService {
             .status(StatusConstant.ENABLE)
             .build();
     return dishMapper.list(dish);
+  }
+
+  /**
+   * 菜品起售停售
+   * @param status
+   * @param id
+   */
+  public void startOrStop(Integer status, Long id) {
+    Dish dish = Dish.builder()
+            .id(id)
+            .status(status)
+            .build();
+    dishMapper.update(dish);
+
+    //如果时停售操作，还需要将包含当前菜品的套餐也停售
+    if(status == StatusConstant.DISABLE){
+      List<Long> dishIds = new ArrayList<>();
+      dishIds.add(id);
+      //select setmeal_id from setmeal_dish where dish_id in (?,?,?)
+      List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(dishIds);
+      if(setmealIds != null && setmealIds.size()>0){
+        for (Long setmealId : setmealIds){
+          Setmeal setmeal = Setmeal.builder()
+                  .id(setmealId)
+                  .status(StatusConstant.DISABLE)
+                  .build();
+          setmealMapper.update(setmeal);
+        }
+      }
+    }
   }
 }
