@@ -36,7 +36,6 @@ public class CommonController {
    * @return
    */
 
-  //图片上传可以，但是无法从阿里云获取图片，大概率是黑马程序员的问题，后续改写为从本地获取图片
   @PostMapping("/upload")
   @ApiOperation("文件上传")
   public Result<String> upload(MultipartFile file) {
