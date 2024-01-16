@@ -45,25 +45,49 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     }
 
     /**
-     * 通过knife4j生成接口文档
+     * 通过knife4j生成管理端接口文档
      * @return
      */
     @Bean
-    public Docket docket() {
-        log.info("准备生成接口文档...");
+    public Docket docketForAdmin() {
+        log.info("准备生成管理端接口文档...");
         ApiInfo apiInfo = new ApiInfoBuilder()
                 .title("Sky-take-out APIs")
                 .version("2.0")
                 .description("takeout platform API documentations")
                 .build();
-        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+        Docket docketForAdmin = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("Admin")
                 .apiInfo(apiInfo)
                 .select()
                 //指定扫描controller包
-                .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.admin"))
                 .paths(PathSelectors.any())
                 .build();
-        return docket;
+        return docketForAdmin;
+    }
+
+    /**
+     * 通过knife4j生成用户端接口文档
+     * @return
+     */
+    @Bean
+    public Docket docketForUser() {
+        log.info("准备生成用户端接口文档...");
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("Sky-take-out APIs")
+                .version("2.0")
+                .description("takeout platform API documentations")
+                .build();
+        Docket docketForUser = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("User")
+                .apiInfo(apiInfo)
+                .select()
+                //指定扫描controller包
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.user"))
+                .paths(PathSelectors.any())
+                .build();
+        return docketForUser;
     }
 
     /**
