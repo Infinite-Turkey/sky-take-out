@@ -123,12 +123,12 @@
                 <artifactId>wechatpay-apache-httpclient</artifactId>
                 <version>0.4.8</version>
             </dependency>
-            <!--AWS s3-->
-            <dependency>
-                <groupId>com.amazonaws</groupId>
-                <artifactId>aws-java-sdk-s3</artifactId>
-                <version>${aws.s3}</version>
-            </dependency>
+<!--            &lt;!&ndash;AWS s3&ndash;&gt;-->
+<!--            <dependency>-->
+<!--                <groupId>com.amazonaws</groupId>-->
+<!--                <artifactId>aws-java-sdk-s3</artifactId>-->
+<!--                <version>${aws.s3}</version>-->
+<!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
 </project>
