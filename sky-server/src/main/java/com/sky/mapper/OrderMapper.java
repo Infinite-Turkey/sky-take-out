@@ -59,4 +59,26 @@ public interface OrderMapper {
      */
     @Select("select * from orders where status = ? and order_time < #{orderTime}")
     List<Orders> getByStatusAndOrderTimeLT(Integer status, LocalDateTime orderTime);
+
+    /**
+     * 根据动态条件统计营业额数据
+     * @param map
+     * @return
+     */
+  Double sumByMap(Map map);
+
+    /**
+     * 根据动态条件统计订单数量
+     * @param map
+     * @return
+     */
+  Integer countByMap(Map map);
+
+    /**
+     * 统计指定时间区间内的销量排名top10
+     * @param begin
+     * @param end
+     * @return
+     */
+  List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin, LocalDateTime end);
 }
